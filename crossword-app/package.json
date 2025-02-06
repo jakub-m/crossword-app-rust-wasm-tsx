@@ -1,0 +1,52 @@
+{
+  "homepage": "/crossword",
+  "name": "crossword-app",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "bootstrap": "^5.3.3",
+    "cra-template-typescript": "1.2.0",
+    "react": "^19.0.0",
+    "react-bootstrap": "^2.10.9",
+    "react-dom": "^19.0.0",
+    "react-scripts": "5.0.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "webpack-start": "webpack-dev-server --mode development --config webpack.config.js --port 3000",
+    "webpack-build": "webpack --mode production"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.2.0",
+    "@types/jest": "^29.5.14",
+    "@types/react": "^19.0.8",
+    "@types/react-dom": "^19.0.3",
+    "eslint-plugin-import": "^2.31.0",
+    "raw-loader": "^4.0.2",
+    "ts-loader": "^9.5.2",
+    "web-vitals": "^3.5.2",
+    "webpack-cli": "^6.0.1"
+  }
+}

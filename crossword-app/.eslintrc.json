@@ -1,0 +1,12 @@
+{
+  "plugins": ["import"],
+  "overrides": [
+    {
+      "files": ["crossword.js"],
+      "rules": {
+        "no-undef": "off"
+      }
+    }
+  ]
+}
+

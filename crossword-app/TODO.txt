@@ -1,0 +1,2 @@
+- normalise
+- the destructor thing does not work, not sure why, needed to comment out.
