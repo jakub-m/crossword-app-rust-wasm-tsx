@@ -10,10 +10,9 @@ import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
-
+import Stack from 'react-bootstrap/Stack';
 
 type GeneratorMode = "InputOrder" | "Automatic";
-
 
 function App() {
   const [crosswordWords, setCrosswordWords] = useState<Word[]>([])
@@ -22,13 +21,13 @@ function App() {
   const [lang, setLang] = useState<Lang>("EN")
   const [textInForm, setTextInForm] = useState<string>(get_text(TextId.InitialText, lang))
   const [textUsedForCrossword, setTextUsedForCrossword] = useState<string>(get_text(TextId.InitialText, lang))
+  const [droppedWords, setDroppedWords] = useState<string[]>([])
 
   useEffect(() => {
-    let cwords = generate_crossword_from_input(textUsedForCrossword, generatorMode)
+    let {words: cwords, dropped} = generate_crossword_from_input(textUsedForCrossword, generatorMode)
     setCrosswordWords(cwords)
+    setDroppedWords(dropped)
   }, [textUsedForCrossword, generatorMode])
-
-  // todo set text on Enter
 
   const onKeyDownInForm = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && e.shiftKey === false) {
@@ -37,6 +36,9 @@ function App() {
   }
 
   useEffect(() => {
+    if (!isHiddenForPrint) {
+      return
+    }
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setIsHiddenForPrint(false)
@@ -46,8 +48,7 @@ function App() {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [setIsHiddenForPrint]);
-
+  }, [isHiddenForPrint, setIsHiddenForPrint]);
 
   const get_next_mode = (prev: GeneratorMode): GeneratorMode => {
     if (prev === "Automatic") {
@@ -91,39 +92,77 @@ function App() {
     </>
   )
 
-  return (
-  <Container>
-      {isHiddenForPrint ? null : input_form}
-      <div style={{padding: "2em"}}>
-        <CrosswordGrid words={crosswordWords} hideLetters={isHiddenForPrint}></CrosswordGrid>
-        <DefinitionArea words={crosswordWords} lang={lang}/>
-      </div>
-  </Container>)
+  const footer = (
+    <footer>
+      <a style={{fontSize: "0.7em", color: "#333", textDecoration: "none"}} href="https://github.com/jakub-m/crossword-app-rust-wasm-tsx">[jakub-m]</a>
+    </footer>
+  )
+
+  const dropped_words_area = (() => {
+    if (droppedWords.length === 0) {
+      return null
+    }
+    return (<Stack>
+        <div>{get_text(TextId.DroppedWords, lang)}</div>
+        {droppedWords.map((w) => <div>{w}</div>)}
+    </Stack>)
+  })();
+
+
+  if (isHiddenForPrint) {
+    return (
+      <Container onClick={() => setIsHiddenForPrint(false)}>
+          <div style={{padding: "2em"}}>
+            <CrosswordGrid words={crosswordWords} hideLetters={true}></CrosswordGrid>
+            <DefinitionArea words={crosswordWords} lang={lang}/>
+          </div>
+      </Container>
+    )
+  } else {
+    return (
+      <Container>
+          {input_form}
+          <div style={{padding: "2em"}}>
+            <CrosswordGrid words={crosswordWords} hideLetters={false}></CrosswordGrid>
+            <Stack gap={3}>
+              <DefinitionArea words={crosswordWords} lang={lang}/>
+              {dropped_words_area}
+            </Stack>
+          </div>
+          {footer}
+      </Container>
+    )
+  }
+
 }
 
-
-const generate_crossword_from_input = (text: string, mode: string) : Word[] => {
-  const input_words: Record<string, string> = text
+const generate_crossword_from_input = (text: string, mode: string) : {words: Word[], dropped: string[]} => {
+  const input_definitions: Record<string, string> = text
     .split("\n")
     .map(line => line.trim())
     .filter(line => line.length > 0)
     .reduce((acc, line) => {
         const [first, ...rest] = line.split(/\s+/);
-        acc[first] = rest.join(" ");
+        const firstLc = first.toLowerCase();
+        acc[firstLc] = rest.join(" ");
         return acc
     }, {} as Record<string, string>);
   
-  const output_cwords = generate_crossword_js(Object.keys(input_words), mode)
-  return output_cwords.map((w) => {
+  const output_cwords = generate_crossword_js(Object.keys(input_definitions), mode)
+  const words = output_cwords.map((w) => {
     return {
       id: w.id,
       x: w.x,
       y: w.y,
       word: w.word,
       orientation: w.orientation,
-      definition: input_words[w.word],
+      definition: input_definitions[w.word],
     } as Word
   });
+
+  const output_word_set = new Set(words.map((w) => w.word));
+  const dropped = Object.keys(input_definitions).filter((s) => !output_word_set.has(s));
+  return {words, dropped}
 }
 
 export default App;

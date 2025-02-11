@@ -1,4 +1,5 @@
 enum TextId {
+  DroppedWords,
   EnterWord,
   Generate,
   GenerateOnEnter,
@@ -19,10 +20,11 @@ trap is's a
 `;
 
 const EN: Record<TextId, string> = {
+  [TextId.DroppedWords]: "Dropped words",
   [TextId.EnterWord]: "Enter word, followed by it's definition",
   [TextId.GenerateOnEnter]: "Generate on Enter",
   [TextId.Generate]: "Generate",
-  [TextId.HideForPrint]: "Hide for print (ESC to go back)",
+  [TextId.HideForPrint]: "Hide for print (ESC or click to go back)",
   [TextId.Horizontal]: "Horizontal",
   [TextId.InitialText]: initialText,
   [TextId.ModeAutomatic]: "Automatic",
@@ -32,10 +34,11 @@ const EN: Record<TextId, string> = {
 };
 
 const PL: Record<TextId, string> = {
+  [TextId.DroppedWords]: "Nie pasujące słowa",
   [TextId.EnterWord]: "Wpisz tekst i definicję",
   [TextId.GenerateOnEnter]: "Generuj na Enter",
   [TextId.Generate]: "Generuj",
-  [TextId.HideForPrint]: "Widok do druku (ESC żeby wrócić)",
+  [TextId.HideForPrint]: "Widok do druku (ESC albo kliknij żeby wrócić)",
   [TextId.Horizontal]: "Poziomo",
   [TextId.InitialText]: initialText,
   [TextId.ModeAutomatic]: "Tryb Automatyczny",

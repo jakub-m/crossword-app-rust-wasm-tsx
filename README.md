@@ -20,7 +20,7 @@ A small side project to exercise Rust as WASM on frontend.
 - [Rust + WASM + React + TypeScript; Better way to do imports?](https://www.reddit.com/r/rust/comments/ug332s/rust_wasm_react_typescript_better_way_to_do/)
 - [How can I make webpack embed my wasm for use in a web worker?](https://stackoverflow.com/questions/70420273/how-can-i-make-webpack-embed-my-wasm-for-use-in-a-web-worker)
 
-# Known issues
+# Known issues, lessons learned
 - I get error around `FinalizationRegistry`, don't know why. 
 
 ```
@@ -49,5 +49,7 @@ And `.eslintrc.json`
   ]
 }
  ```
+
+- To deploy WASM though Github Pages (Jekyll), I need to pack WASM with webpack.
 
 - The generated crosswords are not globally optimal. E.g. "burak", "bacz", "kark", "zlepk" words do not produce a nice rectangle, but a suboptimal shape.

@@ -15,11 +15,11 @@ const DefinitionArea: React.FC<DefinitionAreaProps> = ({words, lang}) => {
     return (
         <Stack direction="horizontal">
             <Stack>
-                <div className="legend-label">{get_text(TextId.Horizontal, lang)}</div>
+                <div>{get_text(TextId.Horizontal, lang)}</div>
                 {words.filter((w) => w.orientation === "hor").map((w) => word_to_div(w))}
             </Stack>
             <Stack>
-                <div className="legend-label">{get_text(TextId.Vertical, lang)}</div>
+                <div>{get_text(TextId.Vertical, lang)}</div>
                 {words.filter((w) => w.orientation === "ver").map((w) => word_to_div(w))}
             </Stack>
         </Stack>
